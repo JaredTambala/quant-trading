@@ -1,0 +1,43 @@
+default_language_version:
+  python: python3.12
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v2.3.0
+      hooks:
+        - id: check-yaml
+          stages: [commit]
+        - id: end-of-file-fixer
+          stages: [commit]
+        - id: trailing-whitespace
+          stages: [commit]
+
+    - repo: local
+      hooks:
+      - id: ruff-linter
+        name: ruff (python)
+        entry: ruff check --force-exclude --fix
+        types: [python]
+        stages: [commit]
+        language: system
+
+    - repo: local
+      hooks:
+      - id: ruff-formatter
+        name: ruff (python)
+        entry: ruff format
+        types: [python]
+        stages: [commit]
+        language: system
+
+    - repo: local
+      hooks:
+        - id: commitizen
+          name: commitizen check
+          description: >
+            Check whether the current commit message follows commiting rules. Allow
+            empty commit messages by default, because they typically indicate to Git
+            that the commit should be aborted.
+          entry: cz check
+          args: [--allow-abort, --commit-msg-file]
+          stages: [commit-msg]
+          language: system
